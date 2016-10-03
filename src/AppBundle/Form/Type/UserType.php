@@ -34,8 +34,9 @@ class UserType extends AbstractType
             ->add('userName', TextType::class, array('label' => 'User name', 'required' => true))
             ->add('userEmail', EmailType::class, array('label' => 'Email', 'required' => true))
             ->add('siteUrl', UrlType::class, array('label' => 'Site Url', 'required' => false))
-            ->add('userBirthday', BirthdayType::class, array('label' => 'Birthday', 'required' => false))
-            ->add('userGender', ChoiceType::class, array('choices' => array(User::GENDER_MALE, User::GENDER_FEMALE), 'label' => 'Gender', 'required' => false))
+            ->add('userBirthday', BirthdayType::class, array('label' => 'Birthday', 'required' => false,
+				'widget' => 'single_text', 'html5' => false, 'attr' => ['class' => 'js-datepicker']))
+            ->add('userGender', ChoiceType::class, array('choices' => array(User::GENDER_MALE, User::GENDER_FEMALE), 'label' => 'Gender', 'required' => false, 'expanded' => true, 'empty_value' => false))
             ->add('userPhone', TextType::class, array('label' => 'Phone number', 'required' => false))
             ->add('userSkill', NumberType::class, array('label' => 'Skill number', 'required' => false))
             ->add('userAbout', TextareaType::class, array('label' => 'About', 'required' => false))

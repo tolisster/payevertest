@@ -1,6 +1,144 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <p>Url for ajax form submit: {{ path('process.form') }}</p>
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{% block stylesheets %}
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 {% endblock %}
 
+{% block body %}
+    <div class="container" id="main-content">
+        <div class="page-header">
+            <button type="button" class="btn btn-default btn-edit pull-right">Edit</button>
+            <h1>Application form</h1>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="panel panel-default panel-left-block">
+                    <div class="panel-body">
+                        <h3 data-bind="userName">{{ user.userName }}</h3>
+                        <ul class="list-unstyled">
+                            <li data-bind="userBirthday">{{ user.userBirthday|date('d F Y') }}</li>
+                            <li data-bind="userEmail">{{ user.userEmail }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <div class="panel panel-default panel-right-block">
+                    <div class="panel-body">
+                        <div class="col-sm-3">
+                            <ul class="list-unstyled">
+                                <li data-bind="siteUrl">{{ user.siteUrl }}</li>
+                                <li data-bind="userPhone">{{ user.userPhone }}</li>
+                                <li>Skill <span data-bind="userSkill">{{ user.userSkill }}</span></li>
+                                <li data-bind="userGender">{{ user.userGender ? "Female" : "Male" }}</li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-7">
+                            <p data-bind="userAbout">{{ user.userAbout }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal" tabindex="-1" role="dialog">
+    </div>
+
+    <script type="text/html" id="settings-edit-template">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+                <h4 class="modal-title">Edit</h4>
+            </div>
+            <div class="modal-body">
+                {{ form_start(form, {'method': 'POST', 'action': path('process.form'), 'attr': {'class': 'container'}}) }}
+                    {{ form_errors(form) }}
+
+                    <h2 class="modal-form-title">Application form</h2>
+                    <div class="row">
+                        <div class="form-group col-sm-5">
+                            {{ form_widget(form.userName, {'attr': {'placeholder': form.userName.vars.label}}) }}
+                            {{ form_label(form.userName) }}
+                        </div>
+                        <div class="form-group col-sm-3">
+                            {{ form_widget(form.userBirthday, {'attr': {'placeholder': form.userBirthday.vars.label}}) }}
+                            {{ form_label(form.userBirthday) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-5">
+                            {{ form_widget(form.userEmail, {'attr': {'placeholder': form.userEmail.vars.label}}) }}
+                            {{ form_label(form.userEmail) }}
+                        </div>
+                        <div class="form-group col-sm-5">
+                            {{ form_widget(form.siteUrl, {'attr': {'placeholder': form.siteUrl.vars.label}}) }}
+                            {{ form_label(form.siteUrl) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-5">
+                            {{ form_widget(form.userPhone, {'type': 'tel', 'attr': {'placeholder': form.userPhone.vars.label}}) }}
+                            {{ form_label(form.userPhone) }}
+                        </div>
+                        <div class="form-group col-sm-2">
+                            {{ form_widget(form.userSkill, {'type': 'number', 'attr': {'placeholder': form.userSkill.vars.label}}) }}
+                            {{ form_label(form.userSkill) }}
+                        </div>
+                        <div class="form-group col-sm-3 form-group-gender">
+                            {% for child in form.userGender %}
+                            <div class="checkbox abc-checkbox abc-checkbox-circle checkbox-inline abc-checkbox-primary">
+                                <input type="radio" name="user[{{ form.userGender.vars.name }}]" id="{{ child.vars.id }}" value="{{ child.vars.value }}"{% if child.vars.checked %} checked="checked"{% endif %}>
+                                <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                                {{ form_label(child) }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        {% for child in form.password %}
+                        <div class="form-group col-sm-3">
+                            {{ form_widget(child, {'attr': {'placeholder': child.vars.label}}) }}
+                            {{ form_label(child) }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group">
+                        {{ form_widget(form.userAbout, {'attr': {'placeholder': form.userAbout.vars.label}}) }}
+                        {{ form_label(form.userAbout) }}
+                    </div>
+                    {{ form_widget(form._token) }}
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+    </script>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('node_modules/jquery-serializejson/jquery.serializejson.min.js') }}"></script>
+    <script src="{{ asset('node_modules/bootstrap-sass/assets/javascripts/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('node_modules/moment/moment.js') }}"></script>
+    <script src="{{ asset('node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="{{ asset('node_modules/underscore/underscore-min.js') }}"></script>
+    <script src="{{ asset('node_modules/backbone.marionette/node_modules/backbone/backbone-min.js') }}"></script>
+    <script src="{{ asset('node_modules/backbone.marionette/lib/backbone.marionette.min.js') }}"></script>
+
+    <script src="{{ asset('js/payever.application.js') }}"></script>
+
+    <script src="{{ asset('js/payever.form.view.js') }}"></script>
+
+    <script src="{{ asset('js/payever.settings.js') }}"></script>
+    <script src="{{ asset('js/payever.settings.views.js') }}"></script>
+
+    <script src="{{ asset('js/payever.layout.js') }}"></script>
+    <script src="{{ asset('js/payever.router.js') }}"></script>
+    <script src="{{ asset('js/payever.js') }}"></script>
+{% endblock %}

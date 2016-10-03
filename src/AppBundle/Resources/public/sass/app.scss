@@ -1,0 +1,177 @@
+$grid-columns: 10;
+
+$body-bg: #fafafb;
+
+$padding-base-vertical: 9px;
+
+$headings-font-weight: 200;
+$headings-color: #7a7a7a;
+
+$icon-font-path: "../node_modules/bootstrap-sass/assets/fonts/bootstrap/";
+
+$btn-default-border: transparent;
+$btn-default-color: #b3b3b3;
+
+//** Border color for inputs on focus
+$input-border-focus: #26abec;
+
+$form-group-margin-bottom: 22px;
+
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+$fa-font-path: "../node_modules/font-awesome/fonts";
+@import "../node_modules/font-awesome/scss/font-awesome";
+
+@import "../node_modules/eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build";
+
+$input-border-color: $input-border;
+@import "../node_modules/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox";
+
+$payever-btn-padding-horizontal: 45px;
+
+.form-group {
+  position: relative;
+}
+
+.control-label {
+  font-weight: normal;
+  color: $input-border-focus;
+  font-size: 12px;
+  display: none;
+  position: absolute;
+  top: -10px;
+}
+
+@mixin form-control-focus($color: $input-border-focus) {
+  $color-rgba: rgba(red($color), green($color), blue($color), .6);
+  &:focus {
+    border-color: transparent transparent $color transparent;
+    @include box-shadow(none);
+    + .control-label {
+      display: block;
+    }
+  }
+}
+
+// Placeholder text
+@mixin placeholder($color: $input-color-placeholder) {
+  &:focus::-moz-placeholder { color: transparent; } // Firefox
+  &:focus:-ms-input-placeholder { color: transparent; } // Internet Explorer 10+
+  &:focus::-webkit-input-placeholder  { color: transparent; } // Safari and Chrome
+}
+
+// Form validation states
+@mixin form-control-validation($text-color: #555, $border-color: #ccc, $background-color: #f5f5f5) {
+  // Set the border and box shadow on specific inputs to match
+  .form-control {
+    border-color: transparent transparent $border-color transparent;
+    @include box-shadow(none);
+    &:focus {
+      border-color: transparent transparent darken($border-color, 10%) transparent;
+      @include box-shadow(none);
+    }
+  }
+}
+
+.form-control {
+  padding: $padding-base-vertical 0;
+  border: 1px solid;
+  border-color: transparent transparent $input-border transparent;
+  border-radius: 0;
+
+  @include form-control-focus;
+
+  // Placeholder
+  @include placeholder;
+
+  @include box-shadow(none);
+}
+
+// Feedback states
+.has-success {
+  @include form-control-validation($state-success-text, $state-success-text, $state-success-bg);
+}
+.has-error {
+  @include form-control-validation($state-danger-text, $state-danger-text, $state-danger-bg);
+}
+
+@media (min-width: $screen-sm-min) {
+  .page-header {
+    margin-top: 96px;
+    padding-bottom: 45px;
+  }
+  .panel-right-block {
+    ul li {
+      text-align: right;
+    }
+  }
+}
+.page-header {
+  .btn-edit {
+    border-radius: 17px;
+    padding-left: $payever-btn-padding-horizontal;
+    padding-right: $payever-btn-padding-horizontal;
+  }
+}
+.panel {
+  h3 {
+    color: #9f9fa0;
+  }
+  ul li, p {
+    color: #a1a1a2;
+  }
+}
+
+.modal-fullpage {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+  .modal-content {
+    height: auto;
+    min-height: 100%;
+    border-radius: 0;
+
+    .btn-group {
+      position: absolute;
+      right: 0;
+
+      > .btn:last-child:not(:first-child) {
+        border-left: 1px solid #e1e1e1;
+      }
+      .btn {
+        padding: 2px 18px;
+      }
+      .btn-default {
+        @include button-variant($btn-default-color, transparent, transparent);
+      }
+      .btn-primary {
+        @include button-variant(#3ba0dd, transparent, transparent);
+      }
+    }
+
+    .container {
+      @include container-fixed;
+
+      @media (min-width: $screen-sm-min) {
+        width: $container-sm;
+      }
+      @media (min-width: $screen-md-min) {
+        width: $container-md;
+      }
+    }
+    @media (min-width: $screen-sm-min) {
+      .modal-title {
+        text-align: center;
+      }
+      .modal-form-title {
+        margin: 100px 0 62px;
+      }
+    }
+
+    .form-group-gender {
+      padding-top: 9px;
+    }
+  }
+}
